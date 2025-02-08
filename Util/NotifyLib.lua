@@ -37,6 +37,7 @@ function Nofitication:Notify(nofdebug, middledebug, all)
     }, GUI)
 
     CreateInstance("UICorner", { CornerRadius = UDim.new(0, 7) }, Shadow)
+    ApplyUIStroke(Shadow, Color3.fromRGB(180, 180, 180), 0.8, 1, Enum.ApplyStrokeMode.Border)
 
     local Window = CreateInstance("Frame", {
         Name = "Window",
