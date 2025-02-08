@@ -36,6 +36,8 @@ function Nofitication:Notify(nofdebug, middledebug, all)
         SliceCenter = Rect.new(10, 10, 118, 118)
     }, GUI)
 
+    CreateInstance("UICorner", { CornerRadius = UDim.new(0, 7) }, Shadow)
+
     local Window = CreateInstance("Frame", {
         Name = "Window",
         BackgroundColor3 = Color3.fromRGB(25, 25, 25),
