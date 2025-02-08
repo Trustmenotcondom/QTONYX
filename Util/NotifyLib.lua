@@ -1,6 +1,5 @@
 local CoreGui = game:GetService("CoreGui")
 
--- Ensure the GUI exists
 local GUI = CoreGui:FindFirstChild("STX_Notification")
 if not GUI then
     GUI = Instance.new("ScreenGui")
@@ -32,7 +31,6 @@ end
 function Notification:Notify(nofdebug, middledebug, all)
     local SelectedType = string.lower(tostring(middledebug.Type))
     
-    -- Shadow background
     local Shadow = CreateInstance("ImageLabel", {
         BackgroundTransparency = 1,
         BorderSizePixel = 0,
@@ -45,7 +43,6 @@ function Notification:Notify(nofdebug, middledebug, all)
         LayoutOrder = -os.clock() -- Sort by time created
     }, GUI)
 
-    -- Notification Frame
     local Window = CreateInstance("Frame", {
         BackgroundColor3 = Color3.fromRGB(25, 25, 25),
         BorderSizePixel = 0,
@@ -53,7 +50,6 @@ function Notification:Notify(nofdebug, middledebug, all)
         ZIndex = 2
     }, Shadow)
 
-    -- Outline
     local Outline_A = CreateInstance("Frame", {
         BackgroundColor3 = middledebug.OutlineColor,
         BorderSizePixel = 0,
@@ -61,7 +57,6 @@ function Notification:Notify(nofdebug, middledebug, all)
         ZIndex = 5
     }, Window)
 
-    -- Title
     local WindowTitle = CreateInstance("TextLabel", {
         BackgroundTransparency = 1,
         Size = UDim2.new(0, 222, 0, 22),
@@ -73,7 +68,6 @@ function Notification:Notify(nofdebug, middledebug, all)
         TextXAlignment = Enum.TextXAlignment.Left
     }, Window)
 
-    -- Description
     local WindowDescription = CreateInstance("TextLabel", {
         BackgroundTransparency = 1,
         Size = UDim2.new(0, 216, 0, 40),
@@ -87,7 +81,6 @@ function Notification:Notify(nofdebug, middledebug, all)
         TextYAlignment = Enum.TextYAlignment.Top
     }, Window)
 
-    -- Adjustments based on type
     if SelectedType == "image" and all.Image then
         WindowTitle.Position = UDim2.new(0, 24, 0, 2)
         CreateInstance("ImageButton", {
@@ -123,11 +116,9 @@ function Notification:Notify(nofdebug, middledebug, all)
         createButton("Check", 28, "http://www.roblox.com/asset/?id=6031094667", Color3.fromRGB(83, 230, 50), true)
     end
 
-    -- Fade-in effect
     Shadow.Size = UDim2.new(0, 0, 0, 0)
     Shadow:TweenSize(UDim2.new(0, 240, 0, 90), "Out", "Linear", 0.2)
 
-    -- Auto-close after set time
     task.spawn(function()
         local duration = math.max(middledebug.Time, 0.5) -- Prevent too-short durations
         task.wait(duration)
