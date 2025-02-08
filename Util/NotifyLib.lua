@@ -41,9 +41,11 @@ function Nofitication:Notify(nofdebug, middledebug, all)
         BackgroundColor3 = Color3.fromRGB(25, 25, 25),
         BorderSizePixel = 0,
         Position = UDim2.new(0, 5, 0, 4),
-        Size = UDim2.new(0, 230, 0, 80),
+        Size = UDim2.new(0, 220, 0, 80),
         ZIndex = 2
     }, Shadow)
+
+    CreateInstance("UICorner", { CornerRadius = UDim.new(0, 7) }, Window)
 
     local Outline_A = CreateInstance("Frame", {
         Name = "Outline_A",
