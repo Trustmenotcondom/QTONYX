@@ -23,14 +23,4 @@ task.spawn(function()
     if CameraShaker then
         require(CameraShaker):Stop()
     end
-
-    local CombatUtil = ReplicatedStorage:FindFirstChild("Modules") and ReplicatedStorage.Modules:FindFirstChild("CombatUtil")
-    if CombatUtil then
-        local combat = require(CombatUtil)
-        combat.CanCharacterMeleeAoe = newcclosure(function() return true end)
-        combat.GetComboPaddingTime = newcclosure(function() return 0 end)
-        combat.GetDefaultAOEDelay = newcclosure(function() return 0 end)
-        combat.GetAttackCancelMultiplier = newcclosure(function() return 0 end)
-        combat.CanAttack = newcclosure(function() return true end)
-    end
 end)
