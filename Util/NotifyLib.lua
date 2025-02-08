@@ -1,6 +1,29 @@
 local Nofitication = {}
 
-local GUI = game:GetService("CoreGui"):FindFirstChild("STX_Nofitication")
+local function CreateInstance(class, properties, parent)
+    local instance = Instance.new(class)
+    for key, value in pairs(properties) do
+        instance[key] = value
+    end
+    instance.Parent = parent
+    return instance
+end
+
+local function ApplyUIStroke(parent, color, transparency, size, mode)
+    return CreateInstance("UIStroke", {
+        Parent = parent,
+        Color = color,
+        Transparency = transparency,
+		Thickness = size or 1,
+        ApplyStrokeMode = mode or Enum.ApplyStrokeMode.Border
+    }, parent)
+end
+
+local GUI = CreateInstance("ScreenGui", {
+    Name = "STX_Nofitication",
+    ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+}, game.CoreGui)
+
 function Nofitication:Notify(nofdebug, middledebug, all)
     local SelectedType = string.lower(tostring(middledebug.Type))
     local ambientShadow = Instance.new("ImageLabel")
