@@ -1,22 +1,3 @@
-local CoreGui = game:GetService("CoreGui")
-
-local GUI = CoreGui:FindFirstChild("STX_Notification")
-if not GUI then
-    GUI = Instance.new("ScreenGui")
-    GUI.Name = "STX_Notification"
-    GUI.Parent = CoreGui
-    GUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    GUI.ResetOnSpawn = false
-    
-    local UIListLayout = Instance.new("UIListLayout")
-    UIListLayout.Name = "STX_NotificationUIListLayout"
-    UIListLayout.Parent = GUI
-    UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
-    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Bottom
-    UIListLayout.Padding = UDim.new(0, 5)
-end
-
 local Notification = {}
 
 local function CreateInstance(class, properties, parent)
@@ -28,24 +9,28 @@ local function CreateInstance(class, properties, parent)
     return instance
 end
 
+local GUI = game:GetService("CoreGui"):FindFirstChild("STX_Notification")
+
 function Notification:Notify(nofdebug, middledebug, all)
     local SelectedType = string.lower(tostring(middledebug.Type))
-    
+
     local Shadow = CreateInstance("ImageLabel", {
+        AnchorPoint = Vector2.new(0.5, 0.5),
         BackgroundTransparency = 1,
         BorderSizePixel = 0,
-        Size = UDim2.new(0, 240, 0, 90),
+        Position = UDim2.new(0.915, 0, 0.937, 0),
+        Size = UDim2.new(0, 0, 0, 0),
         Image = "rbxassetid://1316045217",
         ImageColor3 = Color3.fromRGB(0, 0, 0),
         ImageTransparency = 0.4,
         ScaleType = Enum.ScaleType.Slice,
-        SliceCenter = Rect.new(10, 10, 118, 118),
-        LayoutOrder = -os.clock() -- Sort by time created
+        SliceCenter = Rect.new(10, 10, 118, 118)
     }, GUI)
 
     local Window = CreateInstance("Frame", {
         BackgroundColor3 = Color3.fromRGB(25, 25, 25),
         BorderSizePixel = 0,
+        Position = UDim2.new(0, 5, 0, 5),
         Size = UDim2.new(0, 230, 0, 80),
         ZIndex = 2
     }, Shadow)
@@ -53,12 +38,15 @@ function Notification:Notify(nofdebug, middledebug, all)
     local Outline_A = CreateInstance("Frame", {
         BackgroundColor3 = middledebug.OutlineColor,
         BorderSizePixel = 0,
+        Position = UDim2.new(0, 0, 0, 25),
         Size = UDim2.new(0, 230, 0, 2),
         ZIndex = 5
     }, Window)
 
     local WindowTitle = CreateInstance("TextLabel", {
+        Name = "WindowTitle",
         BackgroundTransparency = 1,
+        Position = UDim2.new(0, 8, 0, 2),
         Size = UDim2.new(0, 222, 0, 22),
         ZIndex = 4,
         Font = Enum.Font.GothamSemibold,
@@ -69,7 +57,9 @@ function Notification:Notify(nofdebug, middledebug, all)
     }, Window)
 
     local WindowDescription = CreateInstance("TextLabel", {
+        Name = "WindowDescription",
         BackgroundTransparency = 1,
+        Position = UDim2.new(0, 8, 0, 34),
         Size = UDim2.new(0, 216, 0, 40),
         ZIndex = 4,
         Font = Enum.Font.GothamSemibold,
@@ -81,51 +71,78 @@ function Notification:Notify(nofdebug, middledebug, all)
         TextYAlignment = Enum.TextYAlignment.Top
     }, Window)
 
-    if SelectedType == "image" and all.Image then
+    if SelectedType == "default" then
+        task.spawn(function()
+            Shadow:TweenSize(UDim2.new(0, 240, 0, 90), "Out", "Linear", 0.2)
+            Outline_A:TweenSize(UDim2.new(0, 0, 0, 2), "Out", "Linear", middledebug.Time)
+            task.wait(middledebug.Time)
+            Shadow:TweenSize(UDim2.new(0, 0, 0, 0), "Out", "Linear", 0.2)
+            task.wait(0.2)
+            Shadow:Destroy()
+        end)
+    elseif SelectedType == "image" then
         WindowTitle.Position = UDim2.new(0, 24, 0, 2)
-        CreateInstance("ImageButton", {
+        local ImageButton = CreateInstance("ImageButton", {
             BackgroundTransparency = 1,
             Position = UDim2.new(0, 4, 0, 4),
             Size = UDim2.new(0, 18, 0, 18),
             ZIndex = 5,
             AutoButtonColor = false,
             Image = all.Image,
-            ImageColor3 = all.ImageColor or Color3.fromRGB(255, 255, 255)
+            ImageColor3 = all.ImageColor
         }, Window)
+        task.spawn(function()
+            Outline_A:TweenSize(UDim2.new(0, 0, 0, 2), "Out", "Linear", middledebug.Time)
+            task.wait(middledebug.Time)
+            Shadow:TweenSize(UDim2.new(0, 0, 0, 0), "Out", "Linear", 0.2)
+            task.wait(0.2)
+            Shadow:Destroy()
+        end)
     elseif SelectedType == "option" then
-        local function createButton(name, pos, image, color, callbackValue)
-            local button = CreateInstance("ImageButton", {
-                Name = name,
-                BackgroundTransparency = 1,
-                Position = UDim2.new(0, pos, 0, 76),
-                Size = UDim2.new(0, 18, 0, 18),
-                ZIndex = 5,
-                AutoButtonColor = false,
-                Image = image,
-                ImageColor3 = color
-            }, Window)
-            button.MouseButton1Click:Connect(function()
-                if all.Callback then all.Callback(callbackValue) end
-                Shadow:TweenSize(UDim2.new(0, 0, 0, 0), "Out", "Linear", 0.2)
-                task.wait(0.2)
-                Shadow:Destroy()
-            end)
-        end
-
-        createButton("Uncheck", 7, "http://www.roblox.com/asset/?id=6031094678", Color3.fromRGB(255, 84, 84), false)
-        createButton("Check", 28, "http://www.roblox.com/asset/?id=6031094667", Color3.fromRGB(83, 230, 50), true)
+        local Uncheck = CreateInstance("ImageButton", {
+            Name = "Uncheck",
+            BackgroundTransparency = 1,
+            Position = UDim2.new(0, 7, 0, 76),
+            Size = UDim2.new(0, 18, 0, 18),
+            ZIndex = 5,
+            AutoButtonColor = false,
+            Image = "http://www.roblox.com/asset/?id=6031094678",
+            ImageColor3 = Color3.fromRGB(255, 84, 84)
+        }, Window)
+        
+        local Check = CreateInstance("ImageButton", {
+            Name = "Check",
+            BackgroundTransparency = 1,
+            Position = UDim2.new(0, 28, 0, 76),
+            Size = UDim2.new(0, 18, 0, 18),
+            ZIndex = 5,
+            AutoButtonColor = false,
+            Image = "http://www.roblox.com/asset/?id=6031094667",
+            ImageColor3 = Color3.fromRGB(83, 230, 50)
+        }, Window)
+        
+        Uncheck.MouseButton1Click:Connect(function()
+            if all.Callback then all.Callback(false) end
+            Shadow:TweenSize(UDim2.new(0, 0, 0, 0), "Out", "Linear", 0.2)
+            task.wait(0.2)
+            Shadow:Destroy()
+        end)
+        
+        Check.MouseButton1Click:Connect(function()
+            if all.Callback then all.Callback(true) end
+            Shadow:TweenSize(UDim2.new(0, 0, 0, 0), "Out", "Linear", 0.2)
+            task.wait(0.2)
+            Shadow:Destroy()
+        end)
+        
+        task.spawn(function()
+            Outline_A:TweenSize(UDim2.new(0, 0, 0, 2), "Out", "Linear", middledebug.Time)
+            task.wait(middledebug.Time)
+            Shadow:TweenSize(UDim2.new(0, 0, 0, 0), "Out", "Linear", 0.2)
+            task.wait(0.2)
+            Shadow:Destroy()
+        end)
     end
-
-    Shadow.Size = UDim2.new(0, 0, 0, 0)
-    Shadow:TweenSize(UDim2.new(0, 240, 0, 90), "Out", "Linear", 0.2)
-
-    task.spawn(function()
-        local duration = math.max(middledebug.Time, 0.5) -- Prevent too-short durations
-        task.wait(duration)
-        Shadow:TweenSize(UDim2.new(0, 0, 0, 0), "Out", "Linear", 0.2)
-        task.wait(0.2)
-        Shadow:Destroy()
-    end)
 end
 
 return Notification
