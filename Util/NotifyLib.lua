@@ -40,7 +40,7 @@ function Nofitication:Notify(nofdebug, middledebug, all)
         Name = "Window",
         BackgroundColor3 = Color3.fromRGB(25, 25, 25),
         BorderSizePixel = 0,
-        Position = UDim2.new(0, 5, 0, 5),
+        Position = UDim2.new(0, 5, 0, 4),
         Size = UDim2.new(0, 230, 0, 80),
         ZIndex = 2
     }, Shadow)
