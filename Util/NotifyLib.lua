@@ -48,6 +48,7 @@ function Nofitication:Notify(nofdebug, middledebug, all)
     }, Shadow)
 
     CreateInstance("UICorner", { CornerRadius = UDim.new(0, 7) }, Window)
+    ApplyUIStroke(Window, Color3.fromRGB(180, 180, 180), 0.8, 1, Enum.ApplyStrokeMode.Border)
 
     local Outline_A = CreateInstance("Frame", {
         Name = "Outline_A",
