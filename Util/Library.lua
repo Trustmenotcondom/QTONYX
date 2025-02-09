@@ -880,14 +880,12 @@ end)
 				
 					UpdateToggle()
 				
-					local function ToggleInput(input)
-						if input.UserInputType == Enum.UserInputType.MouseButton1 then
-							ToggleState = not ToggleState
-							UpdateToggle()
-						end
+					local function ToggleInput()
+						ToggleState = not ToggleState
+						UpdateToggle()
 					end
 				
-					ToggleFrame.InputBegan:Connect(ToggleInput)
+					ToggleFrame.Activated:Connect(ToggleInput)
 					HoverEffect(ToggleFrame, { BackgroundColor3 = Color3.fromRGB(22, 23, 22) }, { BackgroundColor3 = Color3.fromRGB(32, 32, 32) })
 				end
 				
@@ -1320,5 +1318,4 @@ end)
 
 	return Tabs
 end
-
 return Library
