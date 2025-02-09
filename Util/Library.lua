@@ -818,11 +818,12 @@ end)
 					callback = callback or function() end
 					default = default or false
 				
-					local ToggleFrame = CreateInstance("Frame", {
+					local ToggleFrame = CreateInstance("TextButton", {
 						BackgroundColor3 = Color3.fromRGB(32, 32, 32),
 						Size = UDim2.new(1, -15, 0, 30),
 						Position = UDim2.new(0, 5, 0, 0),
-						BorderSizePixel = 0
+						BorderSizePixel = 0,
+						AutoButtonColor = false
 					}, InnerSection)
 					CreateInstance("UICorner", { CornerRadius = UDim.new(0, 6) }, ToggleFrame)
 					ApplyUIStroke(ToggleFrame, Color3.fromRGB(200, 200, 200), 0.8, 1, Enum.ApplyStrokeMode.Border)
