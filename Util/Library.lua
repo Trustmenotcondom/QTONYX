@@ -824,7 +824,7 @@ end)
 						Position = UDim2.new(0, 5, 0, 0),
 						BorderSizePixel = 0,
 						AutoButtonColor = false,
-						Text = "",
+						Text = ""
 					}, InnerSection)
 					CreateInstance("UICorner", { CornerRadius = UDim.new(0, 6) }, ToggleFrame)
 					ApplyUIStroke(ToggleFrame, Color3.fromRGB(200, 200, 200), 0.8, 1, Enum.ApplyStrokeMode.Border)
