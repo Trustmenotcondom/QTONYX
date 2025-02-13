@@ -1,3 +1,4 @@
+local Module = {}
 local Toggles = {
     {tab = Stats, name = "Melee", var = "Melee"},
     {tab = Stats, name = "Defense", var = "Defense"},
@@ -14,13 +15,14 @@ local Toggles = {
     {tab = TimelyRaidFarm, name = "Auto Cursed Captain", var = "AutoCursedCaptain", callback = AutoCursedCaptain}
 }
 
-local function CreateToggle(tab, name, var, callback)
+local CreateToggle = (function(tab, name, var, callback)
     tab:addToggle(name, false, function(Value)
         getgenv()[var] = Value
         if callback then callback() end
         if not Value then StopTween() end
     end)
-end
+end)
+
 for _, toggle in ipairs(Toggles) do
     CreateToggle(toggle.tab, toggle.name, toggle.var, toggle.callback)
 end
