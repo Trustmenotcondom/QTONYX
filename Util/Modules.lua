@@ -15,12 +15,13 @@ local Toggles = {
 }
 
 local function CreateToggle(tab, name, var, callback)
-    category:addToggle(name, false, function(Value)
+    tab:addToggle(name, false, function(Value)
         getgenv()[var] = Value
         if callback then callback() end
         if not Value then StopTween() end
     end)
 end
 for _, toggle in ipairs(Toggles) do
-    CreateToggle(toggle.category, toggle.name, toggle.var, toggle.callback)
+    CreateToggle(toggle.tab, toggle.name, toggle.var, toggle.callback)
 end
+return Module
