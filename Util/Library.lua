@@ -1253,27 +1253,34 @@ function Library:CreateWindow(namehub)
 						RotateIcon(not isOpen)
 					end)
 
-					function RefreshDropdown(newOptions) 
+					function RefreshDropdown(newOptions)
+						-- Ensure newOptions is valid
 						options = newOptions or {}
 					
-						-- Select the first item if available; otherwise, set to "None"
-						if #options > 0 then
-							Index = 1 -- Always select the first available option
-						else
-							Index = nil
-						end
-					
-						Selected = options[Index] or "None"
-						SelectedText.Text = Selected
-					
-						-- Clear previous options
+						-- Clear existing dropdown entries
 						for _, child in ipairs(DropdownScroll:GetChildren()) do
 							if child:IsA("TextButton") then
 								child:Destroy()
 							end
 						end
 					
-						-- Recreate the dropdown list with new options
+						-- Check if the list is empty
+						if #options == 0 then
+							Selected = "None"
+							SelectedText.Text = Selected
+							warn("⚠️ No options available for the dropdown!")
+							return
+						end
+					
+						-- Select the first valid option
+						Index = 1
+						Selected = options[Index]
+						SelectedText.Text = Selected
+					
+						-- Debugging output
+						print("🔄 Updating Dropdown with options:", table.concat(options, ", "))
+					
+						-- Create new dropdown options
 						for i, value in ipairs(options) do
 							local Option = CreateInstance("TextButton", {
 								BackgroundColor3 = Color3.fromRGB(28, 28, 28),
@@ -1285,7 +1292,7 @@ function Library:CreateWindow(namehub)
 								Text = value,
 								TextColor3 = Color3.fromRGB(255, 255, 255)
 							}, DropdownScroll)
-							
+					
 							CreateInstance("UICorner", { CornerRadius = UDim.new(0, 6) }, Option)
 							CreateInstance("UIGradient", {
 								Color = ColorSequence.new{
@@ -1300,16 +1307,11 @@ function Library:CreateWindow(namehub)
 								BorderSizePixel = 0,
 								Position = UDim2.new(0, 5, 0, 3),
 								Size = UDim2.new(0, 8, 0, 20),
-								Visible = false
+								Visible = (i == Index) -- Only visible for the selected item
 							}, Option)
-							
+					
 							CreateInstance("UICorner", { CornerRadius = UDim.new(1, 6) }, SelectionFrame)
 							HoverEffect(Option, { TextColor3 = Color3.fromRGB(150, 100, 255) }, { TextColor3 = Color3.fromRGB(255, 255, 255) })
-					
-							if i == Index then
-								Option.BackgroundColor3 = Color3.fromRGB(28, 28, 28)
-								SelectionFrame.Visible = true
-							end
 					
 							Option.MouseButton1Click:Connect(function()
 								CircleClick(Option, Mouse.X, Mouse.Y)
@@ -1327,7 +1329,9 @@ function Library:CreateWindow(namehub)
 								RotateIcon(false)
 							end)
 						end
-					end
+					
+						print("✅ Dropdown updated successfully!")
+				
 					AdjustTitleSize()
 					RefreshDropdown(options)
 					callback(Selected)
@@ -1335,6 +1339,7 @@ function Library:CreateWindow(namehub)
 						RefreshDropdown = RefreshDropdown
 					}
 				end
+			end
 
 				function Funcs:addTextbox(text_tile, callback)
 					callback = callback or function() end
