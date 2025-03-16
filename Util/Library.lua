@@ -1255,29 +1255,24 @@ function Library:CreateWindow(namehub)
 
 					function RefreshDropdown(newOptions)
 						options = newOptions or {}
-						Index = 1
-					
+
+						-- Select the first item if available; otherwise, set to "None"
 						if #options > 0 then
-							if type(default) == "number" then
-								Index = math.clamp(default, 1, #options)
-							elseif type(default) == "string" then
-								for i, v in ipairs(options) do
-									if v == default then
-										Index = i
-										break
-									end
-								end
-							end
+							Index = 1 -- Always select the first available option
+						else
+							Index = nil
 						end
-						
+					
 						Selected = options[Index] or "None"
 						SelectedText.Text = Selected
 					
+						-- Clear previous options
 						for _, child in ipairs(DropdownScroll:GetChildren()) do
 							if child:IsA("TextButton") then
 								child:Destroy()
 							end
 						end
+					
 					
 				
 
@@ -1306,7 +1301,7 @@ function Library:CreateWindow(namehub)
 							BorderSizePixel = 0,
 							Position = UDim2.new(0, 5, 0, 3),
 							Size = UDim2.new(0, 8, 0, 20),
-							Visible = false
+							Visible = (i == Index)
 						}, Option)
 						CreateInstance("UICorner", { CornerRadius = UDim.new(1, 6) }, SelectionFrame)
 						HoverEffect(Option, { TextColor3 = Color3.fromRGB(150, 100, 255) }, { TextColor3 = Color3.fromRGB(255, 255, 255) })
