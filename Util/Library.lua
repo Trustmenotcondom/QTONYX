@@ -1331,6 +1331,7 @@ function Library:CreateWindow(namehub)
 						end
 					
 						print("✅ Dropdown updated successfully!")
+					end
 				
 					AdjustTitleSize()
 					RefreshDropdown(options)
@@ -1339,7 +1340,6 @@ function Library:CreateWindow(namehub)
 						RefreshDropdown = RefreshDropdown
 					}
 				end
-			end
 
 				function Funcs:addTextbox(text_tile, callback)
 					callback = callback or function() end
