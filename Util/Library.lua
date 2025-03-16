@@ -1255,15 +1255,31 @@ function Library:CreateWindow(namehub)
 
 					function RefreshDropdown(newOptions)
 						options = newOptions or {}
-						Index = #options > 0 and 1 or nil
-						Selected = (Index and options[Index]) or "None"
+						Index = 1
+					
+						if #options > 0 then
+							if type(default) == "number" then
+								Index = math.clamp(default, 1, #options)
+							elseif type(default) == "string" then
+								for i, v in ipairs(options) do
+									if v == default then
+										Index = i
+										break
+									end
+								end
+							end
+						end
+						
+						Selected = options[Index] or "None"
 						SelectedText.Text = Selected
+					
 						for _, child in ipairs(DropdownScroll:GetChildren()) do
 							if child:IsA("TextButton") then
 								child:Destroy()
 							end
 						end
 					
+				
 
 					for i, value in ipairs(options) do
 						local Option = CreateInstance("TextButton", {
