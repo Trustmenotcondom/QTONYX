@@ -1111,20 +1111,27 @@ function Library:CreateWindow(namehub)
 					options = options or {}
 					callback = callback or function() end
 
-					local originalDefault = default 
+					local originalDefault = default
 					local Index = 1
 					if type(default) == "number" then
 						Index = math.clamp(default, 1, #options)
 					elseif type(default) == "string" then
+						local found = false
 						for i, v in ipairs(options) do
 							if v == default then
 								Index = i
+								found = true
 								break
 							end
 						end
+						if not found then
+							Index = 1 -- Ensure valid index if string default is not found
+						end
+					elseif type(default) == "nil" or not default then
+						Index = 1 -- Default to first option if nil
 					end
 
-					local Selected = options[Index] or "None"
+					local Selected = options[Index] or options[1] or "None"
 
 					local DropdownFrame = CreateInstance("Frame", {
 						BackgroundColor3 = Color3.fromRGB(26, 25, 25),
@@ -1323,15 +1330,15 @@ function Library:CreateWindow(namehub)
 
 					function updatedropfunc:Refresh(newlist)
 						newlist = newlist or {}
-					
-						-- Clear existing dropdown options
+
+						-- Clear old options
 						for _, v in ipairs(DropdownScroll:GetChildren()) do
 							if v:IsA("TextButton") then
 								v:Destroy()
 							end
 						end
 					
-						-- Find the new selected index
+						-- Find the new default selection
 						local currentSelected = SelectedText.Text
 						local newIndex = 1
 						local found = false
@@ -1344,7 +1351,6 @@ function Library:CreateWindow(namehub)
 							end
 						end
 					
-						-- If current selected value is not found, reset to default
 						if not found then
 							if type(originalDefault) == "number" then
 								newIndex = math.clamp(originalDefault, 1, #newlist)
