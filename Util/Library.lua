@@ -1305,9 +1305,6 @@ function Library:CreateWindow(namehub)
 							end)
 						end
 				
-					AdjustTitleSize()
-					RefreshDropdown(options)
-					callback(Selected)
 					local updatedropfunc = {}
     
 					function updatedropfunc:Clear()
