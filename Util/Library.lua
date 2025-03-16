@@ -1254,33 +1254,34 @@ function Library:CreateWindow(namehub)
 					end)
 
 					function RefreshDropdown(newOptions)
-						-- Ensure newOptions is valid
-						options = newOptions or {}
-					
-						-- Clear existing dropdown entries
+						options = {}
+						if type(newOptions) == "table" then
+							for _, v in pairs(newOptions) do
+								table.insert(options, tostring(v))
+							end
+						end
+				
 						for _, child in ipairs(DropdownScroll:GetChildren()) do
 							if child:IsA("TextButton") then
 								child:Destroy()
 							end
 						end
-					
-						-- Check if the list is empty
-						if #options == 0 then
+				
+						local isEmpty = true
+						for _ in pairs(options) do
+							isEmpty = false
+							break
+						end
+				
+						if isEmpty then
 							Selected = "None"
 							SelectedText.Text = Selected
 							warn("⚠️ No options available for the dropdown!")
 							return
 						end
-					
-						-- Select the first valid option
 						Index = 1
-						Selected = options[Index]
+						Selected = options[Index] or "None"
 						SelectedText.Text = Selected
-					
-						-- Debugging output
-						print("🔄 Updating Dropdown with options:", table.concat(options, ", "))
-					
-						-- Create new dropdown options
 						for i, value in ipairs(options) do
 							local Option = CreateInstance("TextButton", {
 								BackgroundColor3 = Color3.fromRGB(28, 28, 28),
@@ -1307,7 +1308,7 @@ function Library:CreateWindow(namehub)
 								BorderSizePixel = 0,
 								Position = UDim2.new(0, 5, 0, 3),
 								Size = UDim2.new(0, 8, 0, 20),
-								Visible = (i == Index) -- Only visible for the selected item
+								Visible = (i == Index)
 							}, Option)
 					
 							CreateInstance("UICorner", { CornerRadius = UDim.new(1, 6) }, SelectionFrame)
