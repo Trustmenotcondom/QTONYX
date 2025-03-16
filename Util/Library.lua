@@ -1253,9 +1253,9 @@ function Library:CreateWindow(namehub)
 						RotateIcon(not isOpen)
 					end)
 
-					function RefreshDropdown(newOptions)
+					function RefreshDropdown(newOptions) 
 						options = newOptions or {}
-
+					
 						-- Select the first item if available; otherwise, set to "None"
 						if #options > 0 then
 							Index = 1 -- Always select the first available option
@@ -1273,60 +1273,61 @@ function Library:CreateWindow(namehub)
 							end
 						end
 					
+						-- Recreate the dropdown list with new options
+						for i, value in ipairs(options) do
+							local Option = CreateInstance("TextButton", {
+								BackgroundColor3 = Color3.fromRGB(28, 28, 28),
+								BorderSizePixel = 0,
+								Size = UDim2.new(0, 170, 0, 28),
+								Font = Enum.Font.Gotham,
+								AutoButtonColor = false,
+								TextSize = 14,
+								Text = value,
+								TextColor3 = Color3.fromRGB(255, 255, 255)
+							}, DropdownScroll)
+							
+							CreateInstance("UICorner", { CornerRadius = UDim.new(0, 6) }, Option)
+							CreateInstance("UIGradient", {
+								Color = ColorSequence.new{
+									ColorSequenceKeypoint.new(0, Color3.fromRGB(90, 11, 159)),
+									ColorSequenceKeypoint.new(0.5, Color3.fromRGB(130, 16, 229)),
+									ColorSequenceKeypoint.new(1, Color3.fromRGB(67, 0, 134))
+								},
+							}, Option)
 					
-				
-
-					for i, value in ipairs(options) do
-						local Option = CreateInstance("TextButton", {
-							BackgroundColor3 = Color3.fromRGB(28, 28, 28),
-							BorderSizePixel = 0,
-							Size = UDim2.new(0, 170, 0, 28),
-							Font = Enum.Font.Gotham,
-							AutoButtonColor = false,
-							TextSize = 14,
-							Text = value,
-							TextColor3 = Color3.fromRGB(255, 255, 255)
-						}, DropdownScroll)
-						CreateInstance("UICorner", { CornerRadius = UDim.new(0, 6) }, Option)
-						CreateInstance("UIGradient", {
-							Color = ColorSequence.new{
-								ColorSequenceKeypoint.new(0, Color3.fromRGB(90, 11, 159)),
-								ColorSequenceKeypoint.new(0.5, Color3.fromRGB(130, 16, 229)),
-								ColorSequenceKeypoint.new(1, Color3.fromRGB(67, 0, 134))
-							},
-						}, Option)
-
-						local SelectionFrame = CreateInstance("Frame", {
-							BackgroundColor3 = Color3.fromRGB(150, 100, 255),
-							BorderSizePixel = 0,
-							Position = UDim2.new(0, 5, 0, 3),
-							Size = UDim2.new(0, 8, 0, 20),
-							Visible = (i == Index)
-						}, Option)
-						CreateInstance("UICorner", { CornerRadius = UDim.new(1, 6) }, SelectionFrame)
-						HoverEffect(Option, { TextColor3 = Color3.fromRGB(150, 100, 255) }, { TextColor3 = Color3.fromRGB(255, 255, 255) })
-
-						if i == Index then
-							Option.BackgroundColor3 = Color3.fromRGB(28, 28, 28)
-							SelectionFrame.Visible = true
-						end
-						Option.MouseButton1Click:Connect(function()
-							CircleClick(Option, Mouse.X, Mouse.Y)
-							for _, Other in ipairs(DropdownScroll:GetChildren()) do
-								if Other:IsA("TextButton") then
-									Other:FindFirstChild("Frame").Visible = false
-									Other.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-								end
+							local SelectionFrame = CreateInstance("Frame", {
+								BackgroundColor3 = Color3.fromRGB(150, 100, 255),
+								BorderSizePixel = 0,
+								Position = UDim2.new(0, 5, 0, 3),
+								Size = UDim2.new(0, 8, 0, 20),
+								Visible = false
+							}, Option)
+							
+							CreateInstance("UICorner", { CornerRadius = UDim.new(1, 6) }, SelectionFrame)
+							HoverEffect(Option, { TextColor3 = Color3.fromRGB(150, 100, 255) }, { TextColor3 = Color3.fromRGB(255, 255, 255) })
+					
+							if i == Index then
+								Option.BackgroundColor3 = Color3.fromRGB(28, 28, 28)
+								SelectionFrame.Visible = true
 							end
-							Option.BackgroundColor3 = Color3.fromRGB(28, 28, 28)
-							SelectionFrame.Visible = true
-							SelectedText.Text = value
-							callback(value)
-							UISettings:Tween(DropdownScroll, { Size = UDim2.new(0.8, -10, 0, 0) }, 0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
-							RotateIcon(false)
-						end)
+					
+							Option.MouseButton1Click:Connect(function()
+								CircleClick(Option, Mouse.X, Mouse.Y)
+								for _, Other in ipairs(DropdownScroll:GetChildren()) do
+									if Other:IsA("TextButton") then
+										Other:FindFirstChild("Frame").Visible = false
+										Other.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+									end
+								end
+								Option.BackgroundColor3 = Color3.fromRGB(28, 28, 28)
+								SelectionFrame.Visible = true
+								SelectedText.Text = value
+								callback(value)
+								UISettings:Tween(DropdownScroll, { Size = UDim2.new(0.8, -10, 0, 0) }, 0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
+								RotateIcon(false)
+							end)
+						end
 					end
-				end
 					AdjustTitleSize()
 					RefreshDropdown(options)
 					callback(Selected)
