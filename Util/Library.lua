@@ -1309,6 +1309,10 @@ function Library:CreateWindow(namehub)
 								RotateIcon(false)
 							end)
 						end
+
+					AdjustTitleSize()
+					RefreshDropdown(options)
+					callback(Selected)
 				
 					local updatedropfunc = {}
     
