@@ -1323,16 +1323,19 @@ function Library:CreateWindow(namehub)
 
 					function updatedropfunc:Refresh(newlist)
 						newlist = newlist or {}
-
-						for i, v in ipairs(DropdownScroll:GetChildren()) do
+					
+						-- Clear existing dropdown options
+						for _, v in ipairs(DropdownScroll:GetChildren()) do
 							if v:IsA("TextButton") then
 								v:Destroy()
 							end
 						end
-
+					
+						-- Find the new selected index
 						local currentSelected = SelectedText.Text
 						local newIndex = 1
 						local found = false
+					
 						for i, v in ipairs(newlist) do
 							if v == currentSelected then
 								newIndex = i
@@ -1340,7 +1343,8 @@ function Library:CreateWindow(namehub)
 								break
 							end
 						end
-
+					
+						-- If current selected value is not found, reset to default
 						if not found then
 							if type(originalDefault) == "number" then
 								newIndex = math.clamp(originalDefault, 1, #newlist)
@@ -1359,11 +1363,13 @@ function Library:CreateWindow(namehub)
 								newIndex = 1
 							end
 						end
+					
 						Index = newIndex
 						local newSelected = newlist[newIndex] or "None"
 						SelectedText.Text = newSelected
-
-						for i, value in ipairs(options) do
+					
+						-- Populate new dropdown options
+						for i, value in ipairs(newlist) do
 							local Option = CreateInstance("TextButton", {
 								BackgroundColor3 = Color3.fromRGB(28, 28, 28),
 								BorderSizePixel = 0,
@@ -1399,7 +1405,10 @@ function Library:CreateWindow(namehub)
 								CircleClick(Option, Mouse.X, Mouse.Y)
 								for _, Other in ipairs(DropdownScroll:GetChildren()) do
 									if Other:IsA("TextButton") then
-										Other:FindFirstChild("Frame").Visible = false
+										local Frame = Other:FindFirstChild("Frame")
+										if Frame then
+											Frame.Visible = false
+										end
 										Other.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 									end
 								end
@@ -1412,14 +1421,15 @@ function Library:CreateWindow(namehub)
 								RotateIcon(false)
 							end)
 						end
-
+						UISettings:Tween(DropdownScroll, { Size = UDim2.new(0.8, -10, 0, #newlist * 30) }, 0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
+					
 						AdjustTitleSize()
 						callback(newSelected)
-						UISettings:Tween(DropdownScroll, {Size = UDim2.new(0.8, -10, 0, 0)}, 0.3)
 						RotateIcon(false)
 					end
-				return updatedropfunc
-			end
+					
+					return updatedropfunc
+				end
 
 				function Funcs:addTextbox(text_tile, callback)
 					callback = callback or function() end
