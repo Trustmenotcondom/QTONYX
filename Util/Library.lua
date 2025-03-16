@@ -1310,7 +1310,6 @@ function Library:CreateWindow(namehub)
 						end
 
 					AdjustTitleSize()
-					RefreshDropdown(options)
 					callback(Selected)
 				
 					local ResetDropFunc = {}
@@ -1427,7 +1426,6 @@ function Library:CreateWindow(namehub)
 						callback(NewSelected)
 						RotateIcon(false)
 					end
-					
 					return ResetDropFunc
 				end
 
