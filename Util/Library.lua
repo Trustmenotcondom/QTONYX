@@ -1125,14 +1125,12 @@ function Library:CreateWindow(namehub)
 							end
 						end
 						if not found then
-							Index = 1 -- Ensure valid index if string default is not found
+							Index = 1
 						end
 					elseif type(default) == "nil" or not default then
-						Index = 1 -- Default to first option if nil
+						Index = 1
 					end
-
 					local Selected = options[Index] or options[1] or "None"
-
 					local DropdownFrame = CreateInstance("Frame", {
 						BackgroundColor3 = Color3.fromRGB(26, 25, 25),
 						BorderColor3 = Color3.fromRGB(255, 255, 255),
@@ -1315,7 +1313,7 @@ function Library:CreateWindow(namehub)
 					local updatedropfunc = {}
     
 					function updatedropfunc:Clear()
-						for i, v in ipairs(DropdownScroll:GetChildren()) do
+						for _, v in ipairs(DropdownScroll:GetChildren()) do
 							if v:IsA("TextButton") then
 								v:Destroy()
 							end
@@ -1330,15 +1328,12 @@ function Library:CreateWindow(namehub)
 
 					function updatedropfunc:Refresh(newlist)
 						newlist = newlist or {}
-
-						-- Clear old options
 						for _, v in ipairs(DropdownScroll:GetChildren()) do
 							if v:IsA("TextButton") then
 								v:Destroy()
 							end
 						end
-					
-						-- Find the new default selection
+
 						local currentSelected = SelectedText.Text
 						local newIndex = 1
 						local found = false
@@ -1374,7 +1369,6 @@ function Library:CreateWindow(namehub)
 						local newSelected = newlist[newIndex] or "None"
 						SelectedText.Text = newSelected
 					
-						-- Populate new dropdown options
 						for i, value in ipairs(newlist) do
 							local Option = CreateInstance("TextButton", {
 								BackgroundColor3 = Color3.fromRGB(28, 28, 28),
@@ -1427,8 +1421,6 @@ function Library:CreateWindow(namehub)
 								RotateIcon(false)
 							end)
 						end
-						UISettings:Tween(DropdownScroll, { Size = UDim2.new(0.8, -10, 0, #newlist * 30) }, 0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
-					
 						AdjustTitleSize()
 						callback(newSelected)
 						RotateIcon(false)
