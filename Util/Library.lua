@@ -1196,12 +1196,13 @@ function Library:CreateWindow(namehub)
 
 					local SelectedText = CreateInstance("TextLabel", {
 						BackgroundTransparency = 1,
-						Size = UDim2.new(1, -5, 1, 0),
-						Position = UDim2.new(0, 5, 0, 0),
+						Size = UDim2.new(1, 0, 1, 0),
+						Position = UDim2.new(0, 0, 0, 0),
 						Font = Enum.Font.GothamSemibold,
 						TextColor3 = Color3.fromRGB(255, 255, 255),
 						TextScaled = true,
 						TextXAlignment = Enum.TextXAlignment.Center,
+						TextYAlignment = Enum.TextYAlignment.Center,
 						Text = Selected
 					}, SelectedBox)
 
