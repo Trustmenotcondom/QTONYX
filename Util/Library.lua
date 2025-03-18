@@ -1201,7 +1201,6 @@ function Library:CreateWindow(namehub)
 						Font = Enum.Font.GothamSemibold,
 						TextColor3 = Color3.fromRGB(255, 255, 255),
 						TextScaled = true,
-						TextXAlignment = Enum.TextXAlignment.Center,
 						TextYAlignment = Enum.TextYAlignment.Center,
 						Text = Selected
 					}, SelectedBox)
